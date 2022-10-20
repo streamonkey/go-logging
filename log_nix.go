@@ -1,10 +1,11 @@
+//go:build !windows
 // +build !windows
 
 // Copyright 2013, Örjan Persson. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package logging
+package sm_logging
 
 import (
 	"bytes"

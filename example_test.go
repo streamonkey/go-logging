@@ -1,4 +1,4 @@
-package logging
+package sm_logging
 
 import "os"
 
