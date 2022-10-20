@@ -170,6 +170,40 @@ func (l *Logger) log(lvl Level, format *string, args ...interface{}) {
 	defaultBackend.Log(lvl, 2+l.ExtraCalldepth, record)
 }
 
+func (l *Logger) Log(lvl Level, format *string, args ...interface{}) {
+	l.log(lvl, format, args)
+}
+
+func (l *Logger) LogWithExtraCalldepth(lvl Level, extraCalldepth int, format *string, args ...interface{}) {
+	if !l.IsEnabledFor(lvl) {
+		return
+	}
+
+	// Create the logging record and pass it in to the backend
+	record := &Record{
+		ID:     atomic.AddUint64(&sequenceNo, 1),
+		Time:   timeNow(),
+		Module: l.Module,
+		Level:  lvl,
+		fmt:    format,
+		Args:   args,
+	}
+
+	// TODO use channels to fan out the records to all backends?
+	// TODO in case of errors, do something (tricky)
+
+	// calldepth=2 brings the stack up to the caller of the level
+	// methods, Info(), Fatal(), etc.
+	// ExtraCallDepth allows this to be extended further up the stack in case we
+	// are wrapping these methods, eg. to expose them package level
+	if l.haveBackend {
+		l.backend.Log(lvl, 2+l.ExtraCalldepth+extraCalldepth, record)
+		return
+	}
+
+	defaultBackend.Log(lvl, 2+l.ExtraCalldepth+extraCalldepth, record)
+}
+
 // Fatal is equivalent to l.Critical(fmt.Sprint()) followed by a call to os.Exit(1).
 func (l *Logger) Fatal(args ...interface{}) {
 	l.log(CRITICAL, nil, args...)
