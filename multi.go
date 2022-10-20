@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package sm_logging
+package logging
 
 // TODO remove Level stuff from the multi logger. Do one thing.
 
