@@ -170,8 +170,15 @@ func (l *Logger) log(lvl Level, format *string, args ...interface{}) {
 	defaultBackend.Log(lvl, 2+l.ExtraCalldepth, record)
 }
 
-
+// Log logs a message given loglevel by param.                                                            
+//                                                                         
+// Deprecated: Since Log has format string as param, for consistency it should be named Logf.
+// Use Logf instead.
 func (l *Logger) Log(lvl Level, format string, args ...interface{}) {
+	l.log(lvl, &format, args...)
+}
+
+func (l *Logger) Logf(lvl Level, format string, args ...interface{}) {
 	l.log(lvl, &format, args...)
 }
 
