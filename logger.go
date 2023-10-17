@@ -170,8 +170,9 @@ func (l *Logger) log(lvl Level, format *string, args ...interface{}) {
 	defaultBackend.Log(lvl, 2+l.ExtraCalldepth, record)
 }
 
-func (l *Logger) Log(lvl Level, format *string, args ...interface{}) {
-	l.log(lvl, format, args)
+
+func (l *Logger) Log(lvl Level, format string, args ...interface{}) {
+	l.log(lvl, &format, args...)
 }
 
 func (l *Logger) LogWithExtraCalldepth(lvl Level, extraCalldepth int, format *string, args ...interface{}) {
